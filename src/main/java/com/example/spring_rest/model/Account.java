@@ -1,4 +1,4 @@
-package model;
+package com.example.spring_rest.model;
 
 import jakarta.persistence.*;
 import java.util.Objects;

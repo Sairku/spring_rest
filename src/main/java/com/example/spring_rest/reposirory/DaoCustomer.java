@@ -1,4 +1,4 @@
-package reposirory;
+package com.example.spring_rest.reposirory;
 
 import java.util.List;
 

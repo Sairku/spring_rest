@@ -1,11 +1,11 @@
-package controller;
+package com.example.spring_rest.controller;
 
-import model.Customer;
-import model.Account;
+import com.example.spring_rest.model.Customer;
+import com.example.spring_rest.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.CustomerService;
+import com.example.spring_rest.service.CustomerService;
 import java.util.List;
 
 @RestController

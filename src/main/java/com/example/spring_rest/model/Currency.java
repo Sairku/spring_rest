@@ -1,4 +1,4 @@
-package model;public enum Currency {
+package com.example.spring_rest.model;public enum Currency {
 
     USD("United States Dollar", "$"),
     EUR("Euro", "€"),

@@ -1,11 +1,11 @@
-package service;
+package com.example.spring_rest.service;
 
-import model.Customer;
-import model.Account;
+import com.example.spring_rest.model.Customer;
+import com.example.spring_rest.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import reposirory.AccountRepository;
+import com.example.spring_rest.reposirory.AccountRepository;
 
 import java.util.List;
 import java.util.Optional;

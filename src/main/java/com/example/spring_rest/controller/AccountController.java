@@ -1,10 +1,9 @@
-package controller;
+package com.example.spring_rest.controller;
 
-import model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AccountService;
+import com.example.spring_rest.service.AccountService;
 
 @RestController
 @RequestMapping("/accounts")
