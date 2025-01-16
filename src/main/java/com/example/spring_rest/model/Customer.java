@@ -1,9 +1,6 @@
 package com.example.spring_rest.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +15,15 @@ public class Customer {
     private String name;
     private String email;
     private int age;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Account> accounts = new ArrayList<>();
 
-   Customer(String name, String email, int age){
-       this.name = name;
-       this.email = email;
-       this.age = age;
-   }
+    Customer(String name, String email, int age){
+        this.name = name;
+        this.email = email;
+        this.age = age;
+    }
 
     public long getId() {
         return id;

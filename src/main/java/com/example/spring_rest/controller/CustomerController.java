@@ -29,6 +29,7 @@ public class CustomerController {
     // 2. Отримати інформацію про всіх користувачів
     @GetMapping
     public ResponseEntity<List<Customer>> getAllCustomers() {
+        System.out.println("getAllCustomers");
         List<Customer> customers = customerService.getAllCustomers();
         return ResponseEntity.ok(customers);
     }
