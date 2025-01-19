@@ -1,18 +1,14 @@
 package com.example.spring_rest.service;
 
 import com.example.spring_rest.model.Account;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.spring_rest.repository.AccountRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
 public class AccountService {
-
     private final AccountRepository accountRepository;
 
-    @Autowired
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -46,8 +42,5 @@ public class AccountService {
         toAccount.setBalance(toAccount.getBalance() + amount);
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
-    }
-    public interface AccountRepository extends JpaRepository<Account, Long> {
-        Optional<Account> findByNumber(String number);
     }
 }
