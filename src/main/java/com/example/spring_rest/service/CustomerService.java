@@ -5,7 +5,7 @@ import com.example.spring_rest.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import com.example.spring_rest.reposirory.AccountRepository;
+import com.example.spring_rest.repository.AccountRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.example.spring_rest.reposirory;
+package com.example.spring_rest.repository;
 
 import java.util.List;
 
