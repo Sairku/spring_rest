@@ -2,13 +2,11 @@ package com.example.spring_rest.service;
 
 import com.example.spring_rest.model.Customer;
 import com.example.spring_rest.model.Account;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.spring_rest.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import com.example.spring_rest.repository.AccountRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -16,7 +14,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
 
-    @Autowired
+
     public CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
@@ -61,7 +59,5 @@ public class CustomerService {
         customer.getAccounts().remove(accountToRemove);
         accountRepository.delete(accountToRemove);
     }
-    public interface CustomerRepository extends JpaRepository<Customer, Long> {
-        Optional<Customer> findByEmail(String email);
-    }
+
 }
