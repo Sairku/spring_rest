@@ -1,7 +1,17 @@
+server:
+  port: 9000
+#  debug: true
+
 spring:
   application:
     name: spring_rest
 
+  profiles:
+    active: local
+---
+spring.config.activate.on-profile: local
+
+spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
@@ -18,7 +28,30 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+---
+spring.config.activate.on-profile: prod
 
-server:
-  port: 9000
-  debug: true
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+      url: jdbc:mysql://<remote-db-host>:3306/dbname
+      username: root
+      password: <password>
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

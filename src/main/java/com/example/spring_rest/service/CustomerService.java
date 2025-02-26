@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.spring_rest.repository.AccountRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -33,11 +34,22 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(Long id, Customer updatedCustomer) {
-        Customer existingCustomer = customerRepository.getOne(id);
-        existingCustomer.setName(updatedCustomer.getName());
-        existingCustomer.setEmail(updatedCustomer.getEmail());
-        existingCustomer.setAge(updatedCustomer.getAge());
-        return customerRepository.save(existingCustomer);
+        // Перевіряємо, чи існує клієнт з таким ID
+        Optional<Customer> existingCustomerOpt = customerRepository.findById(id);
+
+        if (existingCustomerOpt.isPresent()) {
+            Customer existingCustomer = existingCustomerOpt.get();
+
+            // Оновлюємо дані клієнта
+            existingCustomer.setName(updatedCustomer.getName());
+            existingCustomer.setEmail(updatedCustomer.getEmail()); // Якщо є поле email
+            existingCustomer.setEmployers(updatedCustomer.getEmployers()); // Якщо потрібно оновити список роботодавців
+
+            // Зберігаємо оновленого клієнта
+            return customerRepository.save(existingCustomer);
+        } else {
+            throw new RuntimeException("Customer not found with id: " + id); // Якщо клієнт не знайдений
+        }
     }
 
     public void deleteCustomer(Long id) {

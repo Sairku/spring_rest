@@ -68,4 +68,5 @@ public class CustomerController {
         customerService.deleteAccountForCustomer(id, accountId);
         return ResponseEntity.ok("Рахунок видалено");
     }
+
 }
