@@ -7,7 +7,7 @@ spring:
     name: spring_rest
 
   profiles:
-    active: local
+    active: prod
 ---
 spring.config.activate.on-profile: local
 
@@ -36,11 +36,16 @@ spring:
     import: optional:file:.env[.properties]
 
   datasource:
-      url: jdbc:mysql://<remote-db-host>:3306/dbname
-      username: root
-      password: <password>
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql-3372cd81-spring-rest.d.aivencloud.com:11981/testdb?sessionVariables=sql_require_primary_key=OFF
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: avnadmin
+    password: ${DB_PASSWORD}
 
+    jpa:
+      database-platform: org.hibernate.dialect.MySQLDialect
+      show-sql: true
+      hibernate:
+        ddl-auto: update
 
 
 
