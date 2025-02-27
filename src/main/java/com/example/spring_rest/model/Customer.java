@@ -1,18 +1,21 @@
 package com.example.spring_rest.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
+@Table(name = "customers")
 public class Customer extends AbstractEntity {
 
     private String name;
 
     @ManyToMany
+    @JoinTable(
+            name = "customer_employer",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "employer_id")
+    )
     private Set<Employer> employers; // Клієнт може працювати в кількох компаніях
 
     @Column(nullable = false, unique = true) // Додаємо анотацію для email

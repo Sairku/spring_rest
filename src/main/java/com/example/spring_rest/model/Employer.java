@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import java.util.Set;
 
 @Entity
-@Table(name = "employer")
+@Table(name = "employers")
 public class Employer extends AbstractEntity {
 
     private String name;

@@ -14,14 +14,14 @@ public class AccountService {
     }
 
     public void deposit(String accountNumber, double amount) {
-        Account account = accountRepository.findByNumber(accountNumber)
+        Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Рахунок не знайдено: " + accountNumber));
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
     }
 
     public void withdraw(String accountNumber, double amount) {
-        Account account = accountRepository.findByNumber(accountNumber)
+        Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Рахунок не знайдено: " + accountNumber));
         if (account.getBalance() < amount) {
             throw new IllegalArgumentException("Недостатньо коштів на рахунку");
@@ -31,9 +31,9 @@ public class AccountService {
     }
 
     public void transfer(String fromAccountNumber, String toAccountNumber, double amount) {
-        Account fromAccount = accountRepository.findByNumber(fromAccountNumber)
+        Account fromAccount = accountRepository.findByAccountNumber(fromAccountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Відправник не знайдений: " + fromAccountNumber));
-        Account toAccount = accountRepository.findByNumber(toAccountNumber)
+        Account toAccount = accountRepository.findByAccountNumber(toAccountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Отримувач не знайдений: " + toAccountNumber));
         if (fromAccount.getBalance() < amount) {
             throw new IllegalArgumentException("Недостатньо коштів на рахунку");
