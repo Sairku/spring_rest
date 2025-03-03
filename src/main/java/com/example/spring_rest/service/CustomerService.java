@@ -1,8 +1,14 @@
 package com.example.spring_rest.service;
 
+import com.example.spring_rest.dto.CustomerFacade;
+import com.example.spring_rest.dto.CustomerRequest;
+import com.example.spring_rest.dto.CustomerResponse;
 import com.example.spring_rest.model.Customer;
 import com.example.spring_rest.model.Account;
 import com.example.spring_rest.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.spring_rest.repository.AccountRepository;
 
@@ -13,63 +19,34 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final AccountRepository accountRepository;
+    private final CustomerFacade customerFacade;
 
-
-    public CustomerService(CustomerRepository customerRepository, AccountRepository accountRepository) {
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository, CustomerFacade customerFacade) {
         this.customerRepository = customerRepository;
-        this.accountRepository = accountRepository;
+        this.customerFacade = customerFacade;
     }
 
     public Customer getCustomerById(Long id) {
-        return customerRepository.getOne(id);
+        return customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public CustomerResponse createCustomer(CustomerRequest customerRequest) {
+        Customer customer = customerFacade.toEntity(customerRequest);
+        Customer savedCustomer = customerRepository.save(customer);
+        return customerFacade.toResponse(savedCustomer);
     }
 
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerResponse updateCustomer(Long id, CustomerRequest customerRequest) {
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        Customer updatedCustomer = customerFacade.toEntity(customerRequest);
+        updatedCustomer.setId(existingCustomer.getId()); // Зберігаємо існуючий ID
+        Customer savedCustomer = customerRepository.save(updatedCustomer);
+        return customerFacade.toResponse(savedCustomer);
     }
-
-    public Customer updateCustomer(Long id, Customer updatedCustomer) {
-        // Перевіряємо, чи існує клієнт з таким ID
-        Optional<Customer> existingCustomerOpt = customerRepository.findById(id);
-
-        if (existingCustomerOpt.isPresent()) {
-            Customer existingCustomer = existingCustomerOpt.get();
-
-            // Оновлюємо дані клієнта
-            existingCustomer.setName(updatedCustomer.getName());
-            existingCustomer.setEmail(updatedCustomer.getEmail()); // Якщо є поле email
-            existingCustomer.setEmployers(updatedCustomer.getEmployers()); // Якщо потрібно оновити список роботодавців
-
-            // Зберігаємо оновленого клієнта
-            return customerRepository.save(existingCustomer);
-        } else {
-            throw new RuntimeException("Customer not found with id: " + id); // Якщо клієнт не знайдений
-        }
+    public Page<CustomerResponse> getAll(Pageable pageable) {
+        return customerRepository.findAll(pageable)
+                .map(customerFacade::toResponse);
     }
-
-    public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
-    }
-
-    public Account createAccountForCustomer(Long customerId, Account account) {
-        Customer customer = customerRepository.getOne(customerId);
-        account.setCustomer(customer);
-        Account savedAccount = accountRepository.save(account);
-        customer.getAccounts().add(savedAccount);
-        customerRepository.save(customer);
-        return savedAccount;
-    }
-
-    public void deleteAccountForCustomer(Long customerId, Long accountId) {
-        Customer customer = customerRepository.getOne(customerId);
-        Account accountToRemove = accountRepository.getOne(accountId);
-        customer.getAccounts().remove(accountToRemove);
-        accountRepository.delete(accountToRemove);
-    }
-
 }

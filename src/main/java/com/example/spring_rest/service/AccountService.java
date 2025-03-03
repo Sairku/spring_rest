@@ -1,16 +1,30 @@
 package com.example.spring_rest.service;
 
+import com.example.spring_rest.dto.AccountFacade;
+import com.example.spring_rest.dto.AccountRequest;
+import com.example.spring_rest.dto.AccountResponse;
 import com.example.spring_rest.model.Account;
 import com.example.spring_rest.repository.AccountRepository;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
+
 
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final CustomerService customerService;
+    private final AccountFacade accountFacade;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, CustomerService customerService, AccountFacade accountFacade) {
         this.accountRepository = accountRepository;
+        this.customerService = customerService;
+        this.accountFacade = accountFacade;
+    }
+    public AccountResponse createAccount(AccountRequest accountRequest) {
+        // Перетворюємо AccountRequest на сутність Account
+        Account account = accountFacade.toEntity(accountRequest);
+        accountRepository.save(account);
+        // Перетворюємо Account назад в AccountResponse для відповіді
+        return accountFacade.toResponse(account);
     }
 
     public void deposit(String accountNumber, double amount) {

@@ -1,20 +1,29 @@
 package com.example.spring_rest.model;
 
 
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+@Data
+@NoArgsConstructor
 public abstract class AbstractEntity {
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    // Гетери та сетери
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @CreatedDate
+    private LocalDateTime createdDate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "last_modified_date")
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 }

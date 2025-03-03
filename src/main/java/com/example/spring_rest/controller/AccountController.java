@@ -1,19 +1,25 @@
 package com.example.spring_rest.controller;
 
+import com.example.spring_rest.dto.AccountRequest;
+import com.example.spring_rest.dto.AccountResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.spring_rest.service.AccountService;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/accounts")
 public class AccountController {
 
     private final AccountService accountService;
 
-    @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
+    @PostMapping
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid AccountRequest accountRequest) {
+        AccountResponse accountResponse = accountService.createAccount(accountRequest);
+        return ResponseEntity.status(201).body(accountResponse);
     }
 
     // 1. Поповнити рахунок
@@ -56,4 +62,5 @@ public class AccountController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 }

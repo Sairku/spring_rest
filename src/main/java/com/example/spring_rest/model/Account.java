@@ -1,40 +1,35 @@
 package com.example.spring_rest.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
+@Table(name = "accounts")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Account extends AbstractEntity {
 
+    @UuidGenerator
     private String accountNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
+
+    @Column(columnDefinition = "double default 0")
     private Double balance;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Customer customer; // Рахунок належить клієнту
 
-    // Гетери та сетери
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
+    public Account(Currency currency, Customer customer) {
+        this.currency = currency;
         this.customer = customer;
     }
+
 }

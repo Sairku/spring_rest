@@ -7,7 +7,7 @@ spring:
     name: spring_rest
 
   profiles:
-    active: prod
+    active: local
 ---
 spring.config.activate.on-profile: local
 

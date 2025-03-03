@@ -1,14 +1,42 @@
 package com.example.spring_rest.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "customers")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = {"accounts", "employers"})
 public class Customer extends AbstractEntity {
 
+    @NotBlank(message = "Customer email is mandatory")
+    @Email(message = "Email should be valid")
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank(message = "Customer password is mandatory")
+    private String password;
+
+    @NotBlank(message = "Customer name is mandatory")
     private String name;
+
+    private int age;
+
+    @Column(length = 20)
+    private String phone;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -16,43 +44,12 @@ public class Customer extends AbstractEntity {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "employer_id")
     )
-    private Set<Employer> employers; // Клієнт може працювати в кількох компаніях
+    private Set<Employer> employers = new HashSet<>();
 
-    @Column(nullable = false, unique = true) // Додаємо анотацію для email
-    private String email;
-
-    @OneToMany(mappedBy = "customer")
-    private Set<Account> accounts; // Зв'язок з рахунками
-
-    // Гетери та сетери
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Customer(String name, String email, int age) {
         this.name = name;
-    }
-
-    public Set<Employer> getEmployers() {
-        return employers;
-    }
-
-    public void setEmployers(Set<Employer> employers) {
-        this.employers = employers;
-    }
-    public Set<Account> getAccounts() {
-        return accounts; // Гетер для рахунків
-    }
-
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts; // Сеттер для рахунків
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
+        this.age = age;
     }
+
 }

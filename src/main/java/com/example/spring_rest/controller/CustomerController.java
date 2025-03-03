@@ -1,72 +1,63 @@
 package com.example.spring_rest.controller;
 
+import com.example.spring_rest.dto.CustomerFacade;
+import com.example.spring_rest.dto.CustomerRequest;
+import com.example.spring_rest.dto.CustomerResponse;
 import com.example.spring_rest.model.Customer;
-import com.example.spring_rest.model.Account;
+import com.example.spring_rest.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.spring_rest.service.CustomerService;
+import jakarta.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerFacade customerFacade;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CustomerFacade customerFacade) {
         this.customerService = customerService;
+        this.customerFacade = customerFacade;
     }
 
-    // 1. Отримати інформацію про окремого користувача, включаючи його рахунки
+    // Отримати інформацію про окремого користувача
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Customer customer = customerService.getCustomerById(id);
-        return ResponseEntity.ok(customer);
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.getCustomerById(id);  // Повертаємо Customer, а не CustomerResponse
+        CustomerResponse response = customerFacade.toResponse(customer);  // Перетворюємо Customer на CustomerResponse
+        return ResponseEntity.ok(response);
     }
 
-    // 2. Отримати інформацію про всіх користувачів
-    @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        System.out.println("getAllCustomers");
-        List<Customer> customers = customerService.getAllCustomers();
-        return ResponseEntity.ok(customers);
-    }
-
-    // 3. Створити користувача
+    // Створити користувача
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        Customer createdCustomer = customerService.createCustomer(customer);
-        return ResponseEntity.ok(createdCustomer);
+    public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+        CustomerResponse createdCustomer = customerService.createCustomer(customerRequest);
+        return ResponseEntity.status(201).body(createdCustomer);
     }
 
-    // 4. Змінити дані користувача
+    // Оновити дані користувача
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
-        Customer customer = customerService.updateCustomer(id, updatedCustomer);
-        return ResponseEntity.ok(customer);
+    public ResponseEntity<CustomerResponse> updateCustomer(
+            @PathVariable Long id,
+            @Valid @RequestBody CustomerRequest customerRequest) {
+        CustomerResponse updatedCustomer = customerService.updateCustomer(id, customerRequest);
+        return ResponseEntity.ok(updatedCustomer);
     }
 
-    // 5. Видалити користувача
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.ok("Користувача видалено");
+    // Отримати список користувачів з пагінацією
+    @GetMapping
+    public ResponseEntity<Page<CustomerResponse>> getAllCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(customerService.getAll(pageable));
     }
-
-    // 6. Створити рахунок для конкретного користувача
-    @PostMapping("/{id}/accounts")
-    public ResponseEntity<Account> createAccountForCustomer(@PathVariable Long id, @RequestBody Account account) {
-        Account createdAccount = customerService.createAccountForCustomer(id, account);
-        return ResponseEntity.ok(createdAccount);
-    }
-
-    // 7. Видалити рахунок у користувача
-    @DeleteMapping("/{id}/accounts/{accountId}")
-    public ResponseEntity<String> deleteAccountForCustomer(@PathVariable Long id, @PathVariable Long accountId) {
-        customerService.deleteAccountForCustomer(id, accountId);
-        return ResponseEntity.ok("Рахунок видалено");
-    }
-
 }
