@@ -10,10 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/customers")
@@ -60,4 +60,12 @@ public class CustomerController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(customerService.getAll(pageable));
     }
+    // Додано @PreAuthorize для обмеження доступу лише для адміністратора
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.ok("Користувача видалено");
+    }
+
 }

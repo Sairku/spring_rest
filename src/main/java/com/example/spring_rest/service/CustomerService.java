@@ -9,6 +9,7 @@ import com.example.spring_rest.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.spring_rest.repository.AccountRepository;
 
@@ -22,6 +23,10 @@ public class CustomerService {
     private final CustomerFacade customerFacade;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    @Autowired
     public CustomerService(CustomerRepository customerRepository, CustomerFacade customerFacade) {
         this.customerRepository = customerRepository;
         this.customerFacade = customerFacade;
@@ -33,6 +38,7 @@ public class CustomerService {
 
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
         Customer customer = customerFacade.toEntity(customerRequest);
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         Customer savedCustomer = customerRepository.save(customer);
         return customerFacade.toResponse(savedCustomer);
     }
@@ -48,5 +54,8 @@ public class CustomerService {
     public Page<CustomerResponse> getAll(Pageable pageable) {
         return customerRepository.findAll(pageable)
                 .map(customerFacade::toResponse);
+    }
+
+    public void deleteCustomer(Long id) {
     }
 }
