@@ -1,10 +1,7 @@
 package com.example.spring_rest.controller;
 
-import com.example.spring_rest.dto.CustomerRequest;
-import com.example.spring_rest.dto.CustomerResponse;
 import com.example.spring_rest.dto.EmployerRequest;
 import com.example.spring_rest.dto.EmployerResponse;
-import com.example.spring_rest.service.CustomerService;
 import com.example.spring_rest.service.EmployerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

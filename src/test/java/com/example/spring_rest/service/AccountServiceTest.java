@@ -3,27 +3,19 @@ package com.example.spring_rest.service;
 import com.example.spring_rest.dto.AccountFacade;
 import com.example.spring_rest.dto.AccountRequest;
 import com.example.spring_rest.dto.AccountResponse;
-import com.example.spring_rest.exception.CustomerException;
-import com.example.spring_rest.exception.NotFoundException;
 import com.example.spring_rest.model.Account;
 import com.example.spring_rest.model.Currency;
-import com.example.spring_rest.model.Customer;
 import com.example.spring_rest.repository.AccountRepository;
-import com.example.spring_rest.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

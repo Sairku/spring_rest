@@ -3,7 +3,6 @@ package com.example.spring_rest.service;
 import com.example.spring_rest.dto.EmployerFacade;
 import com.example.spring_rest.dto.EmployerRequest;
 import com.example.spring_rest.dto.EmployerResponse;
-import com.example.spring_rest.exception.NotFoundException;
 import com.example.spring_rest.model.Employer;
 import com.example.spring_rest.repository.EmployerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 

@@ -3,18 +3,14 @@ package com.example.spring_rest.service;
 import com.example.spring_rest.dto.CustomerFacade;
 import com.example.spring_rest.dto.CustomerRequest;
 import com.example.spring_rest.dto.CustomerResponse;
-import com.example.spring_rest.exception.NotFoundException;
 import com.example.spring_rest.model.Customer;
-import com.example.spring_rest.model.Employer;
 import com.example.spring_rest.repository.CustomerRepository;
-import com.example.spring_rest.repository.EmployerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -113,34 +108,28 @@ public class CustomerServiceTest {
 
     @Test
     void testUpdate() {
-        // Підготовка тестових даних
+
         CustomerRequest updateRequest = new CustomerRequest(1, "newEmail@gmail.com", "newPassword1!", "Pasha", 21, "380987654321");
 
-        // Мокування репозиторію
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
 
-        // Оновлення даних customer
         customer.setEmail(updateRequest.getEmail());
         customer.setPassword(updateRequest.getPassword());
         customer.setName(updateRequest.getName());
         customer.setAge(updateRequest.getAge());
         customer.setPhone(updateRequest.getPhone());
 
-        // Оновлення customerResponse
         customerResponse.setEmail(updateRequest.getEmail());
         customerResponse.setName(updateRequest.getName());
         customerResponse.setAge(updateRequest.getAge());
         customerResponse.setPhone(updateRequest.getPhone());
 
-        // Мокування фасаду та репозиторію
         when(customerFacade.toEntity(any(CustomerRequest.class))).thenReturn(customer);  // Використовуємо any()
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerFacade.toResponse(customer)).thenReturn(customerResponse);
 
-        // Виклик методу, який тестуємо
         CustomerResponse updatedCustomer = customerService.updateCustomer(1L, updateRequest);
 
-        // Перевірка результатів
         assertNotNull(updatedCustomer);
         assertEquals(updateRequest.getEmail(), updatedCustomer.getEmail());
         assertEquals(updateRequest.getName(), updatedCustomer.getName());

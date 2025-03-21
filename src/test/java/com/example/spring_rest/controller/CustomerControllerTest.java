@@ -4,7 +4,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.example.spring_rest.dto.AccountRequest;
 import com.example.spring_rest.dto.AccountResponse;
 import com.example.spring_rest.dto.CustomerRequest;
 import com.example.spring_rest.dto.CustomerResponse;
