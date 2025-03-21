@@ -4,6 +4,7 @@ import com.example.spring_rest.dto.CustomerFacade;
 import com.example.spring_rest.dto.CustomerRequest;
 import com.example.spring_rest.dto.CustomerResponse;
 import com.example.spring_rest.service.CustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -30,6 +31,7 @@ public class CustomerController {
     // Отримати інформацію про окремого користувача
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long id) {
+        log.info("Fetching customer by ID: {}", id);
         CustomerResponse customerResponse = customerService.getCustomerById(id);  // Використовуємо CustomerResponse
         return ResponseEntity.ok(customerResponse);
     }
@@ -37,6 +39,7 @@ public class CustomerController {
     // Створити користувача
     @PostMapping
     public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+        log.info("Creating new customer with email: {}", customerRequest.getEmail());
         CustomerResponse createdCustomer = customerService.createCustomer(customerRequest);
         return ResponseEntity.status(201).body(createdCustomer);
     }
@@ -46,6 +49,7 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> updateCustomer(
             @PathVariable Long id,
             @Valid @RequestBody CustomerRequest customerRequest) {
+        log.info("Updating customer with ID: {}", id);
         CustomerResponse updatedCustomer = customerService.updateCustomer(id, customerRequest);
         return ResponseEntity.ok(updatedCustomer);
     }
@@ -55,6 +59,7 @@ public class CustomerController {
     public ResponseEntity<Page<CustomerResponse>> getAllCustomers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
+        log.info("Fetching all customers, page: {}, size: {}", page, size);
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(customerService.getAll(pageable));
     }
@@ -62,6 +67,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
+        log.info("Deleting customer with ID: {}", id);
         customerService.deleteCustomer(id);
         return ResponseEntity.ok("Customer deleted");
     }
