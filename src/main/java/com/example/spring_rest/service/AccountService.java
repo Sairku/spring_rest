@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
-    private final CustomerService customerService;
     private final AccountFacade accountFacade;
 
-    public AccountService(AccountRepository accountRepository, CustomerService customerService, AccountFacade accountFacade) {
+    public AccountService(AccountRepository accountRepository, AccountFacade accountFacade) {
         this.accountRepository = accountRepository;
-        this.customerService = customerService;
         this.accountFacade = accountFacade;
     }
     public AccountResponse createAccount(AccountRequest accountRequest) {
@@ -27,11 +25,12 @@ public class AccountService {
         return accountFacade.toResponse(account);
     }
 
-    public void deposit(String accountNumber, double amount) {
+    public AccountResponse deposit(String accountNumber, double amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Рахунок не знайдено: " + accountNumber));
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
+        return accountFacade.toResponse(account);
     }
 
     public void withdraw(String accountNumber, double amount) {

@@ -1,8 +1,12 @@
 package com.example.spring_rest.dto;
 
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AccountRequest {
     private long id;

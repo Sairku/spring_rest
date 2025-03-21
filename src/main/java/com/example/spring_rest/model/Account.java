@@ -2,6 +2,7 @@ package com.example.spring_rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Table(name = "accounts")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Account extends AbstractEntity {
 
@@ -21,7 +23,7 @@ public class Account extends AbstractEntity {
     private Currency currency;
 
     @Column(columnDefinition = "double default 0")
-    private Double balance;
+    private double balance;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -31,5 +33,4 @@ public class Account extends AbstractEntity {
         this.currency = currency;
         this.customer = customer;
     }
-
 }

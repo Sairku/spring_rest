@@ -3,7 +3,6 @@ package com.example.spring_rest.controller;
 import com.example.spring_rest.dto.CustomerFacade;
 import com.example.spring_rest.dto.CustomerRequest;
 import com.example.spring_rest.dto.CustomerResponse;
-import com.example.spring_rest.model.Customer;
 import com.example.spring_rest.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,9 +30,8 @@ public class CustomerController {
     // Отримати інформацію про окремого користувача
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long id) {
-        Customer customer = customerService.getCustomerById(id);  // Повертаємо Customer, а не CustomerResponse
-        CustomerResponse response = customerFacade.toResponse(customer);  // Перетворюємо Customer на CustomerResponse
-        return ResponseEntity.ok(response);
+        CustomerResponse customerResponse = customerService.getCustomerById(id);  // Використовуємо CustomerResponse
+        return ResponseEntity.ok(customerResponse);
     }
 
     // Створити користувача
@@ -65,7 +63,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
-        return ResponseEntity.ok("Користувача видалено");
+        return ResponseEntity.ok("Customer deleted");
     }
 
 }

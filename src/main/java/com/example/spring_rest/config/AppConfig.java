@@ -1,5 +1,6 @@
-package com.example.spring_rest;
+package com.example.spring_rest.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,4 +20,8 @@ public class AppConfig {
 
             return mapper;
         }
+    @Bean
+    public Dotenv dotenv() {
+        return Dotenv.load();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.spring_rest.exception;
 
+import com.example.spring_rest.util.ResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -34,4 +35,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAllExceptions(Exception ex) {
         return new ResponseEntity<>("Помилка: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(CustomerException.class)
+    public ResponseEntity<Object> handleException(CustomerException e) {
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, e.getMessage(), null);
+    }
+
+    @ExceptionHandler(ClassNotFoundException.class)
+    public ResponseEntity<Object> handleException(NotFoundException e) {
+        return ResponseHandler.generateResponse(HttpStatus.NOT_FOUND, true, e.getMessage(), null);
+}
 }

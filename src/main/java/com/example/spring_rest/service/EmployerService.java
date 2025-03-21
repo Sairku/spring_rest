@@ -6,7 +6,6 @@ import com.example.spring_rest.dto.EmployerResponse;
 import com.example.spring_rest.model.Employer;
 import com.example.spring_rest.repository.EmployerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +13,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EmployerService {
-    @Autowired
-    private EmployerRepository employerRepository;
+
+    private final EmployerRepository employerRepository;
     private final EmployerFacade employerFacade;
+
 
     public EmployerResponse createEmployer(EmployerRequest employerRequest) {
         // Перетворюємо EmployerRequest на сутність Employer
@@ -35,8 +35,11 @@ public class EmployerService {
         return employerRepository.save(employer);
     }
 
-    public List<Employer> getAllEmployers() {
-        return employerRepository.findAll();
+    public List<EmployerResponse> getAllEmployers() {
+        return employerRepository.findAll()
+                .stream()
+                .map(employerFacade::toResponse)
+                .toList();
     }
 
     public void deleteEmployer(Long id) {

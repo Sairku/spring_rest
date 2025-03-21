@@ -26,9 +26,9 @@ public class AccountController {
     @PostMapping("/{accountNumber}/deposit")
     public ResponseEntity<String> deposit(@PathVariable String accountNumber, @RequestParam double amount) {
         if (amount <= 0) {
-            return ResponseEntity.badRequest().body("Сума повинна бути більшою за 0");
+            return ResponseEntity.badRequest().body("Amount should be greater than 0");
         }
-        accountService.deposit(accountNumber, amount);
+        AccountResponse accountResponse = accountService.deposit(accountNumber, amount);
         return ResponseEntity.ok("Рахунок поповнено на " + amount);
     }
 
@@ -36,7 +36,7 @@ public class AccountController {
     @PostMapping("/{accountNumber}/withdraw")
     public ResponseEntity<String> withdraw(@PathVariable String accountNumber, @RequestParam double amount) {
         if (amount <= 0) {
-            return ResponseEntity.badRequest().body("Сума повинна бути більшою за 0");
+            return ResponseEntity.badRequest().body("Amount should be greater than 0");
         }
         try {
             accountService.withdraw(accountNumber, amount);
@@ -53,11 +53,11 @@ public class AccountController {
             @RequestParam String toAccountNumber,
             @RequestParam double amount) {
         if (amount <= 0) {
-            return ResponseEntity.badRequest().body("Сума повинна бути більшою за 0");
+            return ResponseEntity.badRequest().body("Amount should be greater than 0");
         }
         try {
             accountService.transfer(fromAccountNumber, toAccountNumber, amount);
-            return ResponseEntity.ok("Переказано " + amount + " з рахунку " + fromAccountNumber + " на рахунок " + toAccountNumber);
+            return ResponseEntity.ok("Transfer " + amount + " from account " + fromAccountNumber + " to account " + toAccountNumber);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

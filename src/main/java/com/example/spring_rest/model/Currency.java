@@ -21,9 +21,4 @@ package com.example.spring_rest.model;public enum Currency {
     public String getSymbol(){
         return symbol;
     }
-
-
-
-
-
 }
